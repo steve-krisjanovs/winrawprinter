@@ -5,6 +5,10 @@ A native node.js module I created to facilitate synchronous raw printing to a wi
 
 Print data can be anything compatible with the printer your are sending the print job to (e.g. ZPL for Zebra thermal printing, PCL for HP PCL printers, Postscript, ESC/P for legacy Epson dot matrix printing, etc.)
 
+## Dev environment configuration
+
+Since this module is a native C++ module, please refer to the guides at https://github.com/nodejs/node-gyp for setting things up in order to compile this module. Personally I used VS Code for the module itself and VS 2017 community for the c++ build toolchain
+
 ## Usage
 
 ```
