@@ -1,0 +1,21 @@
+{
+  "name": "winrawprinter",
+  "version": "1.0.0",
+  "description": "Native node module for printing raw printer data directly to a windows printer",
+  "main": "index.js",
+  "gypfile": true,
+  "scripts": {
+    "build": "node-gyp rebuild",
+    "clean": "node-gyp clean"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "node-gyp": "^3.7.0"
+  },
+  "dependencies": {
+    "@types/node": "^10.12.18",
+    "node-addon-api": "^1.3.0",
+    "nan": "2.12.1"
+  }
+}
