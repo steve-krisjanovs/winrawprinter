@@ -1,3 +1,4 @@
+/* cppsrc/rawprinter.h */
 #include <napi.h>
 #include <windows.h>
 namespace rawprinter {

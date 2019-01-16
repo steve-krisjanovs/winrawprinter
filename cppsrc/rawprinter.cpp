@@ -1,12 +1,7 @@
+/* cppsrc/rawprinter.cpp */
 #include "rawprinter.h"
 #include <windows.h>
 #include <tchar.h>
-//#include <vector>
-//#include <locale>
-//#include <codecvt>
-//#include <cstring>
-//#include <string>
-//#include <iostream>
 
 // 
 //  RawDataToPrinter - sends binary data directly to a printer 
@@ -120,15 +115,6 @@ DWORD rawprinter::GetDriverVersion(HANDLE handle)
 //////////////////////////////////////////////////////////////////
 //NAPI endpoints start
 //////////////////////////////////////////////////////////////////
-// std::string rawprinter::hello(){
-//   return "Hello World";
-// }
-// Napi::String rawprinter::HelloWrapped(const Napi::CallbackInfo& info) 
-// {
-//   Napi::Env env = info.Env();
-//   Napi::String returnValue = Napi::String::New(env, rawprinter::hello());
-//   return returnValue;
-// }
 
 Napi::Boolean rawprinter::PrintBufferToPrinter(const Napi::CallbackInfo& info) 
 {
@@ -152,10 +138,6 @@ Napi::Boolean rawprinter::PrintBufferToPrinter(const Napi::CallbackInfo& info)
     strcpy(prt, s.c_str());
     LPBYTE data = LPBYTE(buff.Data());
 
-    //std::cout << "before RawDataToPrinter(...)\n";
-    //std::cout << "buffer bytelength:" << buff.ByteLength() << "\n";
-    //std::cout << "printername: " << s << "\n";
-
     BOOL result = FALSE;
     try 
     {
@@ -169,8 +151,6 @@ Napi::Boolean rawprinter::PrintBufferToPrinter(const Napi::CallbackInfo& info)
 
     Napi::Boolean nresult = Napi::Boolean::New(env, (result == TRUE) ? true : false);
     return nresult;
-
-    //std::cout << "after RawDataToPrinter(...)\n";
 }
 
 Napi::Object rawprinter::Init(Napi::Env env, Napi::Object exports) 
@@ -179,10 +159,6 @@ Napi::Object rawprinter::Init(Napi::Env env, Napi::Object exports)
         "PrintBufferToPrinter",
         Napi::Function::New(env, rawprinter::PrintBufferToPrinter)
     );
-    // exports.Set(
-    //     "hello", 
-    //     Napi::Function::New(env, rawprinter::HelloWrapped)
-    // );
     return exports;
 }
 //////////////////////////////////////////////////////////////////
