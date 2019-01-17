@@ -11,7 +11,9 @@ Since this module is a native C++ module, please refer to the guides at https://
 
 ## Installation
 
-`npm install winrawprinter
+```
+npm install winrawprinter
+```
 
 ## Usage
 
