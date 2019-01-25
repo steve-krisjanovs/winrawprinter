@@ -1,7 +1,9 @@
 /* cppsrc/rawprinter.cpp */
+#define _WINSOCKAPI_    // stops windows.h including winsock.h
 #include "rawprinter.h"
 #include <windows.h>
 #include <tchar.h>
+#include "napi-thread-safe-callback.hpp"
 
 // 
 //  RawDataToPrinter - sends binary data directly to a printer 
@@ -118,19 +120,7 @@ DWORD rawprinter::GetDriverVersion(HANDLE handle)
 
 Napi::Boolean rawprinter::PrintBufferToPrinter(const Napi::CallbackInfo& info) 
 {
-    //std::cout << "start rawprinter::PrintBufferToPrinter(...)\n";
-
     Napi::Env env = info.Env();   
-    Napi::TypeError arg_err = Napi::TypeError::New(env, "Two parameters expected. param1 (string): file path, param2 (string) printer name");
-
-    if (info.Length() != 2)
-        arg_err.ThrowAsJavaScriptException();
-    if (!info[1].IsString())
-        arg_err.ThrowAsJavaScriptException();
-    if (!info[0].IsBuffer())
-        arg_err.ThrowAsJavaScriptException();
-
-    //params are good. send it off to the printer
 
     Napi::Buffer<char> buff = info[0].As<Napi::Buffer<char>>();
     std::string s = (info[1].As<Napi::String>()).Utf8Value();
@@ -153,11 +143,47 @@ Napi::Boolean rawprinter::PrintBufferToPrinter(const Napi::CallbackInfo& info)
     return nresult;
 }
 
+void rawprinter::PrintBufferToPrinterAsync(const Napi::CallbackInfo& info)
+{   
+    auto callback = std::make_shared<ThreadSafeCallback>(info[2].As<Napi::Function>());
+    Napi::Buffer<char> buff = info[0].As<Napi::Buffer<char>>();
+    std::string s = (info[1].As<Napi::String>()).Utf8Value();
+    std::thread([callback, buff, s]
+    {
+        try 
+        {
+            LPTSTR prt = new TCHAR[s.size() + 1]; 
+            strcpy(prt, s.c_str());
+            LPBYTE data = LPBYTE(buff.Data());
+
+            BOOL result = rawprinter::RawDataToPrinter(prt, data, buff.ByteLength());
+            callback->call([result](Napi::Env env, std::vector<napi_value>& args) {
+                    Napi::Boolean nresult = Napi::Boolean::New(env, (result == TRUE) ? true : false);
+                    args = { env.Undefined(), nresult };
+                });
+            //if (result == FALSE)
+            //    throw new std::exception("rawprinter.cpp: Call to rawprinter::RawDataToPrinter(...) returned FALSE");
+            //else
+                
+        }
+        catch (std::exception& e)
+        {
+            // Call back with error
+            callback->callError(e.what());
+        }
+        
+    }).detach();
+}
+
 Napi::Object rawprinter::Init(Napi::Env env, Napi::Object exports) 
 {
     exports.Set(
         "PrintBufferToPrinter",
         Napi::Function::New(env, rawprinter::PrintBufferToPrinter)
+    );
+    exports.Set(
+        "PrintBufferToPrinterAsync",
+        Napi::Function::New(env, rawprinter::PrintBufferToPrinterAsync)
     );
     return exports;
 }

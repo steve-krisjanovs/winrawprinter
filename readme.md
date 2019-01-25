@@ -7,7 +7,12 @@ Print data can be anything compatible with the printer your are sending the prin
 
 ## Dev environment configuration
 
-Since this module is a native C++ module, please refer to the guides at https://github.com/nodejs/node-gyp for setting things up in order to compile this module. Personally I used VS Code for the module itself and VS 2017 community for the c++ build toolchain
+Since this module is a native C++ module, please refer to the guides at https://github.com/nodejs/node-gyp for setting things up in order to compile this module. Personally I used VS Code for the module itself and VS 2017 community for the c++ build toolchain.
+
+## Changelog
+
+* 1.0.2: initial release
+* 1.0.3: added functionality for asynchronous raw printing (initial release was synchronous printing only)
 
 ## Installation
 
@@ -23,9 +28,19 @@ var rawprint = require("winrawprinter");
 var printername = "My Windows printer name";
 var filepath = "C:/temp/printjobdata.dat";
 
+//synchronous usage ('result' is a boolean)
+//-----------------------------------------
 var buff = fs.readFileSync(filepath);
 var result = rawprint.PrintBufferToPrinter(buff, printername);
 
-//note: result is a boolean (true = print successful)
+//asynchronous usage (new in v1.0.3)
+//----------------------------------
+rawprint.PrintBufferToPrinterAsync(buff, printername).then(() => {
+    //print successful
+}).catch((err) => {
+    //print failed
+});
+
+
 
 ```
