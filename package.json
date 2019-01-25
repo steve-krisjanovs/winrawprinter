@@ -1,6 +1,6 @@
 {
   "name": "winrawprinter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Native node module for printing raw printer data directly to a windows printer",
   "main": "index.js",
   "gypfile": true,
@@ -9,7 +9,13 @@
     "url": "https://github.com/steve-krisjanovs/winrawprinter/issues",
     "email": "steve.krisjanovs@gmail.com"
   },
-  "keywords": ["windows", "printing", "raw", "native", "zpl"],
+  "keywords": [
+    "windows",
+    "printing",
+    "raw",
+    "native",
+    "zpl"
+  ],
   "scripts": {
     "build": "node-gyp rebuild",
     "clean": "node-gyp clean"
@@ -25,6 +31,7 @@
   "dependencies": {
     "@types/node": "^10.12.18",
     "node-addon-api": "^1.3.0",
-    "nan": "2.12.1"
+    "nan": "2.12.1",
+    "napi-thread-safe-callback": "^0.0.6"
   }
 }

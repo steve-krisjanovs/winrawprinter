@@ -1,6 +1,7 @@
 /* cppsrc/rawprinter.h */
 #include <napi.h>
 #include <windows.h>
+
 namespace rawprinter {
   //internal functions used by rawprinter.cpp
   //-----------------------------------------
@@ -11,9 +12,8 @@ namespace rawprinter {
   //////////////////////////////////////////////////////////////////
   //NAPI endpoints start
   //////////////////////////////////////////////////////////////////
-  //std::string hello();
-  //Napi::String HelloWrapped(const Napi::CallbackInfo& info);
   Napi::Boolean PrintBufferToPrinter(const Napi::CallbackInfo& info);
+  void PrintBufferToPrinterAsync(const Napi::CallbackInfo& info);
   Napi::Object Init(Napi::Env env, Napi::Object exports);
   //////////////////////////////////////////////////////////////////
   //NAPI endpoints end
